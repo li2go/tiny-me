@@ -9,8 +9,8 @@ const __dirname = path.dirname(__filename);
 
 // 查找安装包文件
 function findInstallers(bundleDir) {
-    const msiPattern = path.join(bundleDir, 'msi', '*.msi');
-    const nsisPattern = path.join(bundleDir, 'nsis', '*.exe');
+    const msiPattern = path.join(bundleDir, '**', '*.msi');
+    const nsisPattern = path.join(bundleDir, '**', '*.exe');
     
     const msiFiles = glob.sync(msiPattern);
     const nsisFiles = glob.sync(nsisPattern);

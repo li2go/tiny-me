@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::fs;
 use serde::Serialize;
 use std::process::Command;
-use tauri::Window;
+use tauri::{Window, Emitter};
 
 #[derive(Serialize)]
 struct FileStats {

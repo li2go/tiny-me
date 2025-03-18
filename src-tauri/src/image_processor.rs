@@ -11,7 +11,6 @@ pub struct CompressOptions {
     pub quality: u32,            // 压缩质量 (1-100)
     pub max_width: Option<u32>,  // 最大宽度
     pub max_height: Option<u32>, // 最大高度
-    pub format: Option<String>,  // 输出格式
     pub maintain_aspect_ratio: Option<bool>, // 保持宽高比
     pub lossless: Option<bool>,  // 是否使用无损压缩
 }
@@ -70,14 +69,18 @@ fn build_compression_args(
             if lossless {
                 cmd.arg("-q:v").arg("0");
             } else {
-                cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+                // JPEG 质量范围是 2-31，2 是最高质量
+                let q = (100 - quality) / 3;
+                cmd.arg("-q:v").arg(format!("{}", q.max(2).min(31)));
             }
         },
         "png" => {
             if lossless {
                 cmd.arg("-compression_level").arg("0");
             } else {
-                cmd.arg("-compression_level").arg(format!("{}", (100 - quality) / 10));
+                // PNG 压缩级别范围是 0-9，9 是最高压缩率
+                let level = (100 - quality) / 11;
+                cmd.arg("-compression_level").arg(format!("{}", level.max(0).min(9)));
             }
         },
         "webp" => {
@@ -88,21 +91,25 @@ fn build_compression_args(
             }
         },
         "gif" => {
-            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+            let q = (100 - quality) / 5;
+            cmd.arg("-q:v").arg(format!("{}", q.max(2).min(31)));
         },
         "bmp" => {
-            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+            let q = (100 - quality) / 5;
+            cmd.arg("-q:v").arg(format!("{}", q.max(2).min(31)));
         },
         "tiff" => {
             if lossless {
                 cmd.arg("-compression").arg("lzw");
             } else {
                 cmd.arg("-compression").arg("jpeg");
-                cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+                let q = (100 - quality) / 5;
+                cmd.arg("-q:v").arg(format!("{}", q.max(2).min(31)));
             }
         },
         _ => {
-            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+            let q = (100 - quality) / 5;
+            cmd.arg("-q:v").arg(format!("{}", q.max(2).min(31)));
         }
     }
     Ok(())
@@ -134,16 +141,7 @@ pub async fn compress_image(
             .file_name()
             .ok_or_else(|| anyhow::anyhow!("无效的输入文件名"))?;
         
-        let output_path = if let Some(format) = &options.format {
-            if !is_supported_format(format) {
-                anyhow::bail!("不支持的输出格式: {}", format);
-            }
-            PathBuf::from(filename).with_extension(format)
-        } else {
-            PathBuf::from(filename)
-        };
-        
-        get_unique_filename(dir, &output_path)
+        get_unique_filename(dir, &PathBuf::from(filename))
     } else {
         anyhow::bail!("请选择输出目录");
     };
@@ -185,16 +183,42 @@ pub async fn compress_image(
     }
 
     // 设置压缩参数
-    let output_format = options.format.as_deref().unwrap_or(&input_extension);
     build_compression_args(
-        output_format,
+        &input_extension,
         options.quality,
         options.lossless.unwrap_or(false),
         &mut cmd,
     )?;
 
-    // 设置输出格式
-    cmd.arg("-f").arg(output_format);
+    // 设置输出格式和编码器
+    match input_extension.as_str() {
+        "png" => {
+            cmd.arg("-f").arg("image2")
+                .arg("-c:v").arg("png");
+        },
+        "jpg" | "jpeg" => {
+            cmd.arg("-f").arg("image2")
+                .arg("-c:v").arg("mjpeg");
+        },
+        "webp" => {
+            cmd.arg("-f").arg("image2")
+                .arg("-c:v").arg("libwebp");
+        },
+        "gif" => {
+            cmd.arg("-f").arg("gif");
+        },
+        "bmp" => {
+            cmd.arg("-f").arg("image2")
+                .arg("-c:v").arg("bmp");
+        },
+        "tiff" => {
+            cmd.arg("-f").arg("image2")
+                .arg("-c:v").arg("tiff");
+        },
+        _ => {
+            cmd.arg("-f").arg("image2");
+        }
+    }
 
     // 设置输出路径
     cmd.arg(&output_path);
@@ -227,7 +251,7 @@ pub async fn compress_image(
         width,
         height,
         compression_ratio,
-        format: output_format.to_string(),
+        format: input_extension,
     })
 }
 

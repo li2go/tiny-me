@@ -756,11 +756,6 @@ function App() {
                         <div key={image.id} className={`imageCard ${viewMode === 'grid' ? 'grid-item' : 'list-item'}`}>
                           <div className="imagePreview">
                             <img src={image.preview} alt={image.file.name} />
-                            {image.status === 'done' && image.compressedPreview && (
-                              <div className="compressedPreview">
-                                <img src={image.compressedPreview} alt={image.file.name} />
-                              </div>
-                            )}
                           </div>
                           <div className="imageInfo">
                             <Text ellipsis style={{ maxWidth: viewMode === 'grid' ? '200px' : '400px' }}>{image.file.name}</Text>
