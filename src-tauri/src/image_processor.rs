@@ -1,11 +1,10 @@
-use anyhow::Result;
+use anyhow::{Result, Context};
 use image::GenericImageView;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::process::Command;
 use std::fs;
-use std::env;
-use rand;
+use std::ffi::OsStr;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct CompressOptions {
@@ -14,6 +13,7 @@ pub struct CompressOptions {
     pub max_height: Option<u32>, // 最大高度
     pub format: Option<String>,  // 输出格式
     pub maintain_aspect_ratio: Option<bool>, // 保持宽高比
+    pub lossless: Option<bool>,  // 是否使用无损压缩
 }
 
 #[derive(Debug, Serialize)]
@@ -23,6 +23,16 @@ pub struct CompressResult {
     pub compressed_size: u64,
     pub width: u32,
     pub height: u32,
+    pub compression_ratio: f64,  // 压缩比率
+    pub format: String,         // 输出格式
+}
+
+// 支持的图片格式
+const SUPPORTED_FORMATS: &[&str] = &["jpg", "jpeg", "png", "webp", "gif", "bmp", "tiff"];
+
+// 检查文件格式是否支持
+fn is_supported_format(extension: &str) -> bool {
+    SUPPORTED_FORMATS.contains(&extension.to_lowercase().as_str())
 }
 
 fn get_unique_filename(dir: &PathBuf, filename: &PathBuf) -> PathBuf {
@@ -40,46 +50,102 @@ fn get_unique_filename(dir: &PathBuf, filename: &PathBuf) -> PathBuf {
     new_path
 }
 
+// 获取文件扩展名
+fn get_extension(path: &PathBuf) -> Result<String> {
+    path.extension()
+        .and_then(OsStr::to_str)
+        .map(|s| s.to_lowercase())
+        .context("无法获取文件扩展名")
+}
+
+// 构建 FFmpeg 压缩参数
+fn build_compression_args(
+    format: &str,
+    quality: u32,
+    lossless: bool,
+    cmd: &mut Command,
+) -> Result<()> {
+    match format {
+        "jpg" | "jpeg" => {
+            if lossless {
+                cmd.arg("-q:v").arg("0");
+            } else {
+                cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+            }
+        },
+        "png" => {
+            if lossless {
+                cmd.arg("-compression_level").arg("0");
+            } else {
+                cmd.arg("-compression_level").arg(format!("{}", (100 - quality) / 10));
+            }
+        },
+        "webp" => {
+            if lossless {
+                cmd.arg("-lossless").arg("1");
+            } else {
+                cmd.arg("-quality").arg(format!("{}", quality));
+            }
+        },
+        "gif" => {
+            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+        },
+        "bmp" => {
+            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+        },
+        "tiff" => {
+            if lossless {
+                cmd.arg("-compression").arg("lzw");
+            } else {
+                cmd.arg("-compression").arg("jpeg");
+                cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+            }
+        },
+        _ => {
+            cmd.arg("-q:v").arg(format!("{}", (100 - quality) / 5));
+        }
+    }
+    Ok(())
+}
 
 pub async fn compress_image(
     input_path: &PathBuf,
     output_dir: Option<PathBuf>,
     options: CompressOptions,
 ) -> Result<CompressResult> {
-    // 输出文件路径到控制台以便于调试
-    println!("Compressing image: {:?}", input_path);
-    println!("Output directory: {:?}", output_dir); // 添加调试日志
-
     // 检查输入文件是否存在
     if !input_path.exists() {
-        anyhow::bail!("Input file does not exist: {:?}", input_path);
+        anyhow::bail!("输入文件不存在: {:?}", input_path);
     }
 
-    // 获取输入文件的扩展名
-    let extension = input_path
-        .extension()
-        .and_then(|ext| ext.to_str())
-        .unwrap_or("jpg");
+    // 检查文件格式
+    let input_extension = get_extension(input_path)?;
+    if !is_supported_format(&input_extension) {
+        anyhow::bail!("不支持的图片格式: {}", input_extension);
+    }
 
     // 获取输出文件路径
     let output_path = if let Some(dir) = &output_dir {
         if !dir.exists() {
-            anyhow::bail!("Output directory does not exist: {:?}", dir);
+            anyhow::bail!("输出目录不存在: {:?}", dir);
         }
         
         let filename = input_path
             .file_name()
-            .ok_or_else(|| anyhow::anyhow!("Invalid input filename"))?;
+            .ok_or_else(|| anyhow::anyhow!("无效的输入文件名"))?;
+        
         let output_path = if let Some(format) = &options.format {
+            if !is_supported_format(format) {
+                anyhow::bail!("不支持的输出格式: {}", format);
+            }
             PathBuf::from(filename).with_extension(format)
         } else {
             PathBuf::from(filename)
         };
         
-        // 使用新的函数处理文件名冲突
         get_unique_filename(dir, &output_path)
     } else {
-        anyhow::bail!("Output directory is required. Please select an output directory first.");
+        anyhow::bail!("请选择输出目录");
     };
 
     // 构建ffmpeg命令
@@ -91,45 +157,44 @@ pub async fn compress_image(
     if let Some(max_width) = options.max_width {
         if let Some(max_height) = options.max_height {
             if options.maintain_aspect_ratio.unwrap_or(true) {
-                // 使用 force_original_aspect_ratio=1 来保持宽高比
                 filter_complex = format!(
-                    "scale=min({},iw):min({},ih):force_original_aspect_ratio=1",
+                    "scale='min({},iw)':'min({},ih)':force_original_aspect_ratio=1",
                     max_width, max_height
                 );
             } else {
-                // 不保持宽高比时直接指定尺寸
                 filter_complex = format!(
                     "scale={}:{}",
                     max_width, max_height
                 );
             }
-        } else if let Some(max_width) = options.max_width {
-            // 只设置最大宽度
+        } else {
             filter_complex = format!(
-                "scale=min({},iw):-1:force_original_aspect_ratio=1",
+                "scale='min({},iw)':-1:force_original_aspect_ratio=1",
                 max_width
             );
-        } else if let Some(max_height) = options.max_height {
-            // 只设置最大高度
-            filter_complex = format!(
-                "scale=-1:min({},ih):force_original_aspect_ratio=1",
-                max_height
-            );
         }
+    } else if let Some(max_height) = options.max_height {
+        filter_complex = format!(
+            "scale=-1:'min({},ih)':force_original_aspect_ratio=1",
+            max_height
+        );
     }
 
     if !filter_complex.is_empty() {
         cmd.arg("-vf").arg(filter_complex);
     }
 
-    // 设置输出质量
-    cmd.arg("-q:v")
-        .arg(format!("{}", (100 - options.quality) / 5));
+    // 设置压缩参数
+    let output_format = options.format.as_deref().unwrap_or(&input_extension);
+    build_compression_args(
+        output_format,
+        options.quality,
+        options.lossless.unwrap_or(false),
+        &mut cmd,
+    )?;
 
     // 设置输出格式
-    if let Some(format) = &options.format {
-        cmd.arg("-f").arg(format);
-    }
+    cmd.arg("-f").arg(output_format);
 
     // 设置输出路径
     cmd.arg(&output_path);
@@ -137,33 +202,42 @@ pub async fn compress_image(
     // 执行命令
     let output = cmd.output()?;
     if !output.status.success() {
-        anyhow::bail!("FFmpeg failed: {}", String::from_utf8_lossy(&output.stderr));
+        anyhow::bail!("FFmpeg 压缩失败: {}", String::from_utf8_lossy(&output.stderr));
     }
 
-    // 获取原始文件大小
+    // 获取原始文件大小和压缩后大小
     let original_size = fs::metadata(input_path)?.len();
     let compressed_size = fs::metadata(&output_path)?.len();
 
+    // 计算压缩比率
+    let compression_ratio = if original_size > 0 {
+        ((compressed_size as f64 / original_size as f64) - 1.0) * 100.0
+    } else {
+        0.0
+    };
+
     // 获取图片尺寸
     let img = image::open(&output_path)?;
-    let dimensions = img.dimensions();
+    let (width, height) = img.dimensions();
 
     Ok(CompressResult {
         output_path: output_path.to_string_lossy().into_owned(),
         original_size,
         compressed_size,
-        width: dimensions.0,
-        height: dimensions.1,
+        width,
+        height,
+        compression_ratio,
+        format: output_format.to_string(),
     })
 }
 
-// 批量压缩函数
 pub async fn batch_compress(
     input_paths: &[PathBuf],
     output_dir: PathBuf,
     options: CompressOptions,
 ) -> Result<Vec<CompressResult>, String> {
     let mut results = Vec::new();
+    let mut errors = Vec::new();
 
     for input_path in input_paths {
         match compress_image(
@@ -174,8 +248,12 @@ pub async fn batch_compress(
         .await
         {
             Ok(result) => results.push(result),
-            Err(e) => eprintln!("Error compressing {:?}: {}", input_path, e),
+            Err(e) => errors.push(format!("压缩文件 {:?} 失败: {}", input_path, e)),
         }
+    }
+
+    if !errors.is_empty() {
+        return Err(errors.join("\n"));
     }
 
     Ok(results)

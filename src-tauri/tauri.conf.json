@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "image-compress",
+  "productName": "tiny-me",
   "version": "0.1.0",
-  "identifier": "com.image-compress.app",
+  "identifier": "com.tiny-me.app",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "image-compress",
+        "title": "tiny-me",
         "width": 800,
         "height": 600,
         "dragDropEnabled": true
@@ -64,11 +64,15 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/icon_16x16.png",
+      "icons/icon_32x32.png",
+      "icons/icon_64x64.png",
+      "icons/icon_128x128.png",
+      "icons/icon_256x256.png",
+      "icons/icon.ico",
+      "icons/icon_32x32@2x.png",
+      "icons/icon_64x64@2x.png",
+      "icons/icon_128x128@2x.png"
     ]
   }
 }

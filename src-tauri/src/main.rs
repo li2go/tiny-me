@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::fs;
 use serde::Serialize;
 use std::process::Command;
-use tauri::{Window, Emitter};
+use tauri::Window;
 
 #[derive(Serialize)]
 struct FileStats {
@@ -22,7 +22,7 @@ struct ProgressEvent {
 }
 
 #[tauri::command]
-async fn handle_drop(window: Window, paths: Vec<String>) -> Result<(), String> {
+async fn handle_drop(_window: Window, paths: Vec<String>) -> Result<(), String> {
     for path in paths {
         println!("Dropped file: {}", path);
     }
@@ -82,8 +82,6 @@ fn open_file_location(path: String) -> Result<(), String> {
         return Err("File does not exist".to_string());
     }
 
-    let parent = path.parent().ok_or("Invalid file path")?;
-    
     #[cfg(target_os = "windows")]
     {
         Command::new("explorer")
@@ -104,8 +102,9 @@ fn open_file_location(path: String) -> Result<(), String> {
 
     #[cfg(target_os = "linux")]
     {
+        let _parent = path.parent().ok_or("Invalid file path")?;
         Command::new("xdg-open")
-            .arg(parent)
+            .arg(_parent)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
@@ -123,18 +122,11 @@ async fn compress_image(
     let input_path = PathBuf::from(input_path);
     let output_dir = output_dir.map(PathBuf::from);
 
-    println!("Compressing image with output_dir: {:?}", output_dir);
-
     // 发送开始压缩事件
     window.emit("compress-progress", ProgressEvent {
         file_path: input_path.to_string_lossy().to_string(),
         progress: 0,
     }).map_err(|e| e.to_string())?;
-
-    // 读取文件大小用于计算进度
-    let file_size = fs::metadata(&input_path)
-        .map_err(|e| e.to_string())?
-        .len();
 
     let result = image_processor::compress_image(&input_path, output_dir, options)
         .await
@@ -172,7 +164,7 @@ async fn batch_compress(
         .map_err(|e| e.to_string())?;
 
     // 发送完成事件
-    for (result, input_path) in results.iter().zip(input_paths.iter()) {
+    for (_result, input_path) in results.iter().zip(input_paths.iter()) {
         window.emit("compress-progress", ProgressEvent {
             file_path: input_path.to_string_lossy().to_string(),
             progress: 100,
