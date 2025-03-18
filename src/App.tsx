@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Layout, Typography, Space, Button, message, Slider, Form, InputNumber, Select, Modal, Collapse, Tag, theme, Alert, Checkbox, Divider, Input, Spin, Progress } from "antd";
 import { InboxOutlined, SettingOutlined, PictureOutlined,  InfoCircleOutlined, GithubOutlined, FolderOpenOutlined, UnorderedListOutlined, AppstoreOutlined, ArrowLeftOutlined, PlayCircleOutlined, FileAddOutlined } from "@ant-design/icons";
 import { invoke } from "@tauri-apps/api/core";
@@ -125,7 +125,6 @@ function App() {
   };
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [compressOptions, setCompressOptions] = useState<CompressOptions>({
     quality: 80,
     maxWidth: undefined,
@@ -137,7 +136,6 @@ function App() {
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [outputDir, setOutputDir] = useState<string>();
   const [isSelectingOutputDir, setIsSelectingOutputDir] = useState(false);
-  const [activeTab, setActiveTab] = useState('1');
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
@@ -247,7 +245,6 @@ function App() {
 
             if (files.length > 0) {
               message.success(t('message.fileAddedSuccessfully'));
-              setActiveTab('2');
             }
           } finally {
             if (isMounted) {
@@ -272,24 +269,6 @@ function App() {
         unlisten();
       }
     };
-  }, []);
-
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
   }, []);
 
   const processFiles = async (files: File[]) => {
@@ -333,7 +312,6 @@ function App() {
     }
     if (files.length > 0) {
       message.success(t('message.fileAddedSuccessfully'));
-      setActiveTab('2');
     }
   };
 
@@ -444,7 +422,6 @@ function App() {
       );
 
       message.success(t('message.compressionComplete', { filename: imageFile.file.name }));
-      setActiveTab('3');
     } catch (error) {
       setImageFiles(prev =>
         prev.map(img =>
@@ -630,9 +607,6 @@ function App() {
               {imageFiles.length === 0 ? (
                 <div 
                   className={`dropZone ${isDragging ? 'dragover' : ''} ${isLoading ? 'loading' : ''}`}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
                 >
                   {isLoading ? (
                     <Space direction="vertical" align="center">
