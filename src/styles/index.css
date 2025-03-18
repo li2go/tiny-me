@@ -56,11 +56,12 @@
 
 .mainContent {
   padding-top: 88px;
-  padding-bottom: 24px;
+  padding-bottom: 80px; /* 为底部统计面板留出空间 */
   min-height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .uploadContainer {
@@ -73,24 +74,41 @@
 }
 
 .dropZone {
-  width: 100%;
-  min-height: calc(100vh - 200px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #e5e7eb;
-  border-radius: 12px;
-  background: white;
-  transition: all 0.2s ease;
-  cursor: pointer;
   padding: 40px;
-  user-select: none;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: 300px;
+  width: 100%;
 }
 
 .dropZone:hover {
   border-color: #1890ff;
-  background: #f8fafc;
+  background-color: #f0f7ff;
+}
+
+.dropZone.dragover {
+  border-color: #1890ff;
+  background-color: #f0f7ff;
+}
+
+.dropZone .anticon {
+  font-size: 48px;
+  color: #1890ff;
+}
+
+.dropZone .ant-typography {
+  margin-bottom: 8px;
+}
+
+.dropZone .ant-btn {
+  margin-top: 16px;
 }
 
 .dropZone .ant-btn {
@@ -109,7 +127,6 @@
 .dropZone > .anticon {
   font-size: 64px;
   color: #1890ff;
-  margin-bottom: 24px;
 }
 
 .dropZone .ant-typography {
@@ -125,35 +142,71 @@
 }
 
 .imageList {
-  padding: 24px;
+  width: 100%;
+  padding: 16px;
 }
 
-.imageListHeader {
-  margin-bottom: 24px;
-}
-
-.imageGrid {
+.imageList.grid-view .imageContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
+  padding: 16px;
+}
+
+.imageList.list-view .imageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
 }
 
 .imageCard {
-  background: white;
+  background: var(--color-bg-container);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .imageCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.imageCard.grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.imageCard.list-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+}
+
+.imageCard.list-item .imagePreview {
+  width: 200px;
+  height: 200px;
+  margin-right: 16px;
+  padding-top: 0;
+}
+
+.imageCard.list-item .imageInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.imageCard.list-item .imageActions {
+  margin-top: auto;
 }
 
 .imagePreview {
   position: relative;
-  padding-top: 66.67%;
-  background: #f5f5f5;
+  width: 100%;
+  padding-top: 75%;
   overflow: hidden;
 }
 
@@ -163,7 +216,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .compressedPreview {
@@ -172,44 +225,51 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
 
-.imageCard:hover .compressedPreview {
+.imagePreview:hover .compressedPreview {
   opacity: 1;
 }
 
 .imageInfo {
-  padding: 12px;
+  padding: 16px;
 }
 
 .imageActions {
-  margin-top: 12px;
+  margin-top: 16px;
   display: flex;
-  justify-content: flex-end;
   gap: 8px;
-  user-select: none;
+  justify-content: flex-end;
+}
+
+.imageListHeader {
+  display: flex;
+  position: sticky;
+  top: 80px;
+  z-index: 999;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.imageContainer {
+  margin-bottom: 24px;
 }
 
 .settingsPanel {
+  position: sticky;
+  top: 88px;
+  z-index: 10;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   margin-bottom: 16px;
-}
-
-.settingsCollapse {
-  border: none;
-}
-
-.presetSection {
-  margin-bottom: 16px;
-}
-
-.presetGroup {
-  margin-bottom: 12px;
 }
 
 .modern-tag {
@@ -220,16 +280,6 @@
 
 .modern-tag:hover {
   transform: translateY(-1px);
-}
-
-.statsBar {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 12px;
-  display: flex;
-  justify-content: space-around;
-  margin-top: 16px;
 }
 
 .statItem {
@@ -349,11 +399,6 @@
     background-color: #374151;
   }
 
-  .statsBar {
-    background-color: #1f2937;
-    border-top-color: #374151;
-  }
-
   .statValue {
     color: #f9fafb;
   }
@@ -369,6 +414,13 @@
   .ant-btn-text:hover {
     color: #177ddc;
     background: #111b26;
+  }
+
+  .imageListHeader,
+  .settingsPanel
+ {
+    background: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -469,5 +521,98 @@
 
   .ant-modal-footer {
     border-top-color: #374151;
+  }
+}
+
+.settingsFloatButton {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.settingsFloatButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.settingsPanel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.settingsHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.settingsHeader .ant-typography {
+  flex: 1;
+  text-align: center;
+  margin-right: 48px;
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .settingsPanel {
+    background: #1f2937;
+  }
+
+  .settingsHeader {
+    border-bottom-color: #374151;
+  }
+
+  .settingsFloatButton {
+    background: #1890ff;
+    border-color: #1890ff;
+  }
+
+  .settingsFloatButton:hover {
+    background: #40a9ff;
+    border-color: #40a9ff;
+  }
+}
+
+/* 等比压缩样式 */
+.aspect-ratio-info {
+  margin-top: 8px;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.04);
+  display: inline-block;
+}
+
+.aspect-ratio-info.maintain {
+  color: #389e0d;
+}
+
+.aspect-ratio-info.ignore {
+  color: #d48806;
+}
+
+@media (prefers-color-scheme: dark) {
+  .aspect-ratio-info {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+  
+  .aspect-ratio-info.maintain {
+    color: #52c41a;
+  }
+  
+  .aspect-ratio-info.ignore {
+    color: #faad14;
   }
 } 

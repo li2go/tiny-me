@@ -7,19 +7,43 @@
     "dragText": "拖放图片到这里",
     "or": "或",
     "selectButton": "选择图片",
-    "supportText": "支持 PNG、JPG、WebP 格式",
-    "addMore": "添加更多图片",
-    "clearList": "清空列表"
+    "supportText": "支持 JPG、PNG、WebP 格式",
+    "addMore": "添加更多",
+    "clearList": "清空列表",
+    "resetList": "重置状态"
   },
   "imageInfo": {
     "original": "原始",
     "compressed": "压缩后",
     "compress": "压缩",
     "save": "保存",
-    "remove": "移除"
+    "remove": "移除",
+    "view": "查看",
+    "retry": "重试",
+    "start": "开始",
+    "recompress": "重新压缩"
   },
   "settings": {
     "title": "压缩设置",
+    "currentSettings": "当前压缩设置",
+    "modifySettings": "修改设置",
+    "quality": "压缩质量",
+    "format": "输出格式",
+    "maxSize": "最大尺寸",
+    "width": "宽度",
+    "height": "高度",
+    "qualityLow": "低",
+    "qualityMedium": "中",
+    "qualityHigh": "高",
+    "outputDir": "输出目录",
+    "selectDir": "选择目录",
+    "openDir": "打开目录",
+    "maintainAspectRatio": "保持宽高比（等比压缩）",
+    "back": "返回",
+    "aspectRatioInfo": {
+      "maintain": "✓ 等比压缩，保持原始宽高比，图片不会变形",
+      "ignore": "⚠️ 非等比压缩，图片可能会变形"
+    },
     "presets": {
       "title": "快速预设",
       "deviceTitle": "设备预设",
@@ -31,21 +55,55 @@
       "mobile3x": "移动端 3x",
       "androidHD": "Android HD",
       "androidFHD": "Android FHD",
-      "ipadRetina": "iPad Retina"
-    },
-    "quality": "压缩质量",
-    "format": "输出格式",
-    "maxSize": "最大尺寸",
-    "width": "宽度",
-    "height": "高度",
-    "qualityLow": "低",
-    "qualityMedium": "中",
-    "qualityHigh": "高"
+      "ipadRetina": "iPad Retina",
+      "descriptions": {
+        "web": "适合网页使用的图片，压缩率高，画质好",
+        "social": "适合社交媒体分享，平衡大小和质量",
+        "archive": "高质量存档，保持原始尺寸",
+        "mobile1x": "适用于 iPhone X/11/12/13/14 等设备的 1x 分辨率",
+        "mobile2x": "适用于 iPhone X/11/12/13/14 等设备的 2x 分辨率",
+        "mobile3x": "适用于 iPhone X/11/12/13/14 等设备的 3x 分辨率",
+        "androidHD": "适用于大多数 Android 设备的 HD 分辨率",
+        "androidFHD": "适用于高端 Android 设备的 FHD+ 分辨率",
+        "ipadRetina": "适用于 iPad Pro 等设备的 Retina 分辨率"
+      }
+    }
   },
   "stats": {
     "totalImages": "总图片数",
     "compressed": "已压缩",
     "averageRatio": "平均压缩率"
+  },
+  "view": {
+    "list": "列表",
+    "grid": "网格"
+  },
+  "confirm": {
+    "title": "确认清空",
+    "clearList": "确定要清空所有图片吗？",
+    "resetTitle": "确认重置",
+    "resetList": "确定要重置所有图片的状态吗？"
+  },
+  "message": {
+    "compressionComplete": "压缩完成: {{filename}}",
+    "compressionFailed": "压缩失败: {{error}}",
+    "batchComplete": "批量压缩完成: {{count}}张图片",
+    "batchFailed": "批量压缩失败: {{error}}",
+    "noOutputDir": "未选择输出目录，操作已取消",
+    "cannotOpenLocation": "无法打开文件位置",
+    "dirSelected": "输出目录已选择",
+    "dirSelectFailed": "选择目录失败",
+    "cannotOpenDir": "无法打开目录: {{error}}",
+    "unsupportedFileType": "不支持的文件类型: {{filename}}",
+    "cannotGetFilePath": "无法获取文件路径: {{filename}}",
+    "errorProcessingFile": "处理文件 {{filename}} 时出错",
+    "fileAddedSuccessfully": "文件添加成功",
+    "fileSelectFailed": "选择文件失败",
+    "noValidImageFiles": "没有有效的图片文件",
+    "someFilesSkipped": "已跳过非图片文件",
+    "fileAlreadyExists": "文件 {{filename}} 已存在于列表中",
+    "processingFiles": "正在处理文件...",
+    "tasks": "个任务"
   },
   "about": {
     "title": "关于 TinyMe",

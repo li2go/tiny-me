@@ -4,22 +4,46 @@
     "about": "About"
   },
   "upload": {
-    "dragText": "Drop images here",
+    "dragText": "Drag and drop images here",
     "or": "or",
     "selectButton": "Select Images",
-    "supportText": "Supports PNG, JPG, WebP formats",
-    "addMore": "Add More Images",
-    "clearList": "Clear List"
+    "supportText": "Supports JPG, PNG, WebP formats",
+    "addMore": "Add More",
+    "clearList": "Clear List",
+    "resetList": "Reset Status"
   },
   "imageInfo": {
     "original": "Original",
     "compressed": "Compressed",
     "compress": "Compress",
     "save": "Save",
-    "remove": "Remove"
+    "remove": "Remove",
+    "view": "View",
+    "retry": "Retry",
+    "start": "Start",
+    "recompress": "Recompress"
   },
   "settings": {
     "title": "Compression Settings",
+    "currentSettings": "Current Settings",
+    "modifySettings": "Modify Settings",
+    "quality": "Compression Quality",
+    "format": "Output Format",
+    "maxSize": "Maximum Size",
+    "width": "Width",
+    "height": "Height",
+    "qualityLow": "Low",
+    "qualityMedium": "Medium",
+    "qualityHigh": "High",
+    "outputDir": "Output Directory",
+    "selectDir": "Select Directory",
+    "openDir": "Open Directory",
+    "maintainAspectRatio": "Maintain Aspect Ratio",
+    "back": "Back",
+    "aspectRatioInfo": {
+      "maintain": "✓ Maintains aspect ratio, image won't be distorted",
+      "ignore": "⚠️ Aspect ratio not maintained, image may be distorted"
+    },
     "presets": {
       "title": "Quick Presets",
       "deviceTitle": "Device Presets",
@@ -32,20 +56,43 @@
       "androidHD": "Android HD",
       "androidFHD": "Android FHD",
       "ipadRetina": "iPad Retina"
-    },
-    "quality": "Compression Quality",
-    "format": "Output Format",
-    "maxSize": "Maximum Size",
-    "width": "Width",
-    "height": "Height",
-    "qualityLow": "Low",
-    "qualityMedium": "Medium",
-    "qualityHigh": "High"
+    }
   },
   "stats": {
     "totalImages": "Total Images",
     "compressed": "Compressed",
     "averageRatio": "Average Ratio"
+  },
+  "view": {
+    "list": "List",
+    "grid": "Grid"
+  },
+  "confirm": {
+    "title": "Confirm Clear",
+    "clearList": "Are you sure you want to clear all images?",
+    "resetTitle": "Confirm Reset",
+    "resetList": "Are you sure you want to reset all image statuses?"
+  },
+  "message": {
+    "compressionComplete": "Compression complete: {{filename}}",
+    "compressionFailed": "Compression failed: {{error}}",
+    "batchComplete": "Batch compression complete: {{count}} images",
+    "batchFailed": "Batch compression failed: {{error}}",
+    "noOutputDir": "No output directory selected, operation cancelled",
+    "cannotOpenLocation": "Cannot open file location",
+    "dirSelected": "Output directory selected",
+    "dirSelectFailed": "Failed to select directory",
+    "cannotOpenDir": "Cannot open directory: {{error}}",
+    "unsupportedFileType": "Unsupported file type: {{filename}}",
+    "cannotGetFilePath": "Cannot get file path: {{filename}}",
+    "errorProcessingFile": "Error processing file {{filename}}",
+    "fileAddedSuccessfully": "Files added successfully",
+    "fileSelectFailed": "Failed to select files",
+    "noValidImageFiles": "No valid image files found",
+    "someFilesSkipped": "Non-image files have been skipped",
+    "fileAlreadyExists": "File {{filename}} already exists in the list",
+    "processingFiles": "Processing files...",
+    "tasks": " tasks"
   },
   "about": {
     "title": "About TinyMe",

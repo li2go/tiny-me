@@ -14,7 +14,8 @@
       {
         "title": "image-compress",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "dragDropEnabled": true
       }
     ],
     "security": {
@@ -25,8 +26,14 @@
           "description": "Capability for the main window with full file system access",
           "windows": ["main"],
           "permissions": [
+            "core:default",
             "fs:default",
-            "dialog:default"
+            "dialog:default",
+            "core:window:default",
+            "core:path:default",
+            "core:webview:default",
+            "opener:default",
+            "core:event:default"
           ],
           "scope": {
             "fs": {
