@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "TinyMe",
+    "about": "关于"
+  },
+  "upload": {
+    "dragText": "拖放图片到这里",
+    "or": "或",
+    "selectButton": "选择图片",
+    "supportText": "支持 PNG、JPG、WebP 格式",
+    "addMore": "添加更多图片",
+    "clearList": "清空列表"
+  },
+  "imageInfo": {
+    "original": "原始",
+    "compressed": "压缩后",
+    "compress": "压缩",
+    "save": "保存",
+    "remove": "移除"
+  },
+  "settings": {
+    "title": "压缩设置",
+    "presets": {
+      "title": "快速预设",
+      "deviceTitle": "设备预设",
+      "web": "网页图片",
+      "social": "社交媒体",
+      "archive": "图片存档",
+      "mobile1x": "移动端 1x",
+      "mobile2x": "移动端 2x",
+      "mobile3x": "移动端 3x",
+      "androidHD": "Android HD",
+      "androidFHD": "Android FHD",
+      "ipadRetina": "iPad Retina"
+    },
+    "quality": "压缩质量",
+    "format": "输出格式",
+    "maxSize": "最大尺寸",
+    "width": "宽度",
+    "height": "高度",
+    "qualityLow": "低",
+    "qualityMedium": "中",
+    "qualityHigh": "高"
+  },
+  "stats": {
+    "totalImages": "总图片数",
+    "compressed": "已压缩",
+    "averageRatio": "平均压缩率"
+  },
+  "about": {
+    "title": "关于 TinyMe",
+    "description": "TinyMe 是一款简单高效的图片压缩工具，专注于提供最佳的图片压缩体验。",
+    "features": {
+      "title": "主要特性",
+      "list": [
+        "支持多种图片格式（PNG、JPG、WebP）",
+        "智能压缩算法，保持最佳画质",
+        "批量处理能力",
+        "多种预设方案",
+        "完全本地处理，保护隐私"
+      ]
+    },
+    "developer": {
+      "title": "开发者",
+      "author": "作者",
+      "version": "版本"
+    },
+    "techStack": {
+      "title": "技术栈",
+      "description": "使用 Tauri + React + TypeScript 开发"
+    },
+    "buttons": {
+      "github": "GitHub",
+      "close": "了解"
+    }
+  }
+} 

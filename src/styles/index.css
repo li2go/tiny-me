@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* 全局变量 */
 :root {
   --primary-color: #1890ff;
@@ -31,115 +35,201 @@
 /* 自定义组件样式 */
 .appContainer {
   min-height: 100vh;
+  background-color: #f8fafc;
 }
 
 .header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 16px 24px;
+  background: white;
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  user-select: none;
 }
 
 .mainContent {
-  max-width: 1200px;
-  margin: 24px auto;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  box-shadow: var(--card-shadow);
+  padding-top: 88px;
+  padding-bottom: 24px;
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.settingsPanel {
+.uploadContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropZone {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 40px;
+  user-select: none;
+}
+
+.dropZone:hover {
+  border-color: #1890ff;
+  background: #f8fafc;
+}
+
+.dropZone .ant-btn {
+  height: 44px;
+  padding: 0 32px;
+  font-size: 16px;
+  border-radius: 22px;
+  margin-bottom: 16px;
+}
+
+.dropZone .ant-btn .anticon {
+  font-size: 20px;
+}
+
+/* 调整空状态的大图标 */
+.dropZone > .anticon {
+  font-size: 64px;
+  color: #1890ff;
   margin-bottom: 24px;
 }
 
-.uploadArea {
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.8);
-  border: 2px dashed rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  transition: var(--transition-base);
+.dropZone .ant-typography {
+  margin: 0;
+  font-size: 24px;
+  color: #1f2937;
 }
 
-.uploadArea:hover {
-  border-color: var(--primary-color);
-  transform: translateY(-2px);
+.dropZone .ant-typography.ant-typography-secondary {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 16px 0;
+}
+
+.imageList {
+  padding: 24px;
+}
+
+.imageListHeader {
+  margin-bottom: 24px;
 }
 
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  margin-top: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
 }
 
 .imageCard {
-  border-radius: 12px;
+  background: white;
+  border-radius: 8px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  transition: var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
 }
 
 .imageCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .imagePreview {
   position: relative;
-  width: 100%;
-  height: 200px;
+  padding-top: 66.67%;
+  background: #f5f5f5;
   overflow: hidden;
 }
 
 .imagePreview img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: var(--transition-base);
+  object-fit: contain;
 }
 
-.imagePreview:hover img {
-  transform: scale(1.05);
+.compressedPreview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.imageCard:hover .compressedPreview {
+  opacity: 1;
 }
 
 .imageInfo {
-  padding: 16px;
+  padding: 12px;
 }
 
-.presetButton {
-  width: 100%;
+.imageActions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  user-select: none;
+}
+
+.settingsPanel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.settingsCollapse {
+  border: none;
+}
+
+.presetSection {
+  margin-bottom: 16px;
+}
+
+.presetGroup {
   margin-bottom: 12px;
-  height: 48px !important;
-  border-radius: 8px !important;
-  font-weight: 500 !important;
-  transition: var(--transition-base);
 }
 
-.presetButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.modern-tag {
+  cursor: pointer;
+  transition: all 0.3s;
+  user-select: none;
 }
 
-.compressionProgress {
+.modern-tag:hover {
+  transform: translateY(-1px);
+}
+
+.statsBar {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 12px;
+  display: flex;
+  justify-content: space-around;
   margin-top: 16px;
-}
-
-.statsCard {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
 }
 
 .statItem {
@@ -147,51 +237,237 @@
 }
 
 .statValue {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--primary-color);
+  font-size: 20px;
+  font-weight: bold;
+  color: #1890ff;
 }
 
 .statLabel {
-  color: rgba(0, 0, 0, 0.65);
+  color: #8c8c8c;
   margin-top: 4px;
+  font-size: 12px;
+}
+
+.footer {
+  text-align: center;
+  padding: 24px 0;
+  color: #6b7280;
+  font-size: 14px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  box-shadow: none;
+  user-select: none;
+}
+
+.presetAlert {
+  margin-top: 16px;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* 按钮样式优化 */
+.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.ant-btn-text {
+  color: #8c8c8c;
+}
+
+.ant-btn-text:hover {
+  color: #1890ff;
+  background: #e6f7ff;
+}
+
+/* 空状态样式 */
+.ant-empty {
+  padding: 20px 0;
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-
-
-  .mainContent {
-    padding: 16px;
+@media (max-width: 1200px) {
+  .threeColumnLayout {
+    grid-template-columns: 240px 1fr 320px;
   }
+}
 
-  .imageGrid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 8px;
+  }
+  
+  .threeColumnLayout {
+    grid-template-columns: 1fr;
   }
 }
 
 /* 暗色模式支持 */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  .appContainer {
+    background-color: #111827;
   }
 
-  .header,
-  .mainContent,
-  .uploadArea,
-  .imageCard,
-  .statsCard {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+  .header {
+    border-bottom-color: #374151;
+  }
+
+  .inputSection,
+  .processSection,
+  .outputSection {
+    border-color: #374151;
+    background-color: #1f2937;
+  }
+
+  .sectionTitle {
+    color: #e5e7eb;
+  }
+
+  .fileItem:hover {
+    background-color: #374151;
+  }
+
+  .statsBar {
+    background-color: #1f2937;
+    border-top-color: #374151;
+  }
+
+  .statValue {
+    color: #f9fafb;
   }
 
   .statLabel {
-    color: rgba(255, 255, 255, 0.65);
+    color: #9ca3af;
   }
 
-  .ant-collapse-item {
-    background: rgba(255, 255, 255, 0.05) !important;
+  .ant-btn-text {
+    color: #8c8c8c;
+  }
+
+  .ant-btn-text:hover {
+    color: #177ddc;
+    background: #111b26;
+  }
+}
+
+/* 全局禁用文字选择的元素 */
+.ant-btn,
+.ant-slider,
+.ant-collapse-header,
+.ant-select-selector,
+.ant-statistic,
+.anticon {
+  user-select: none !important;
+}
+
+/* About 弹窗样式 */
+.about-content {
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.about-content p {
+  margin-bottom: 16px;
+}
+
+.about-section {
+  margin-bottom: 16px;
+}
+
+.about-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 12px;
+}
+
+.about-section ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.about-section ul li {
+  margin-bottom: 8px;
+  color: #4b5563;
+}
+
+/* 自定义 Modal 样式 */
+.ant-modal-content {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.ant-modal-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.ant-modal-body {
+  padding: 24px;
+}
+
+.ant-modal-footer {
+  border-top: 1px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .about-content {
+    color: #e5e7eb;
+  }
+
+  .about-section h4 {
+    color: #f3f4f6;
+  }
+
+  .about-section ul li {
+    color: #d1d5db;
+  }
+
+  .ant-modal-content {
+    background-color: #1f2937;
+  }
+
+  .ant-modal-header {
+    background-color: #1f2937;
+    border-bottom-color: #374151;
+  }
+
+  .ant-modal-title {
+    color: #f3f4f6;
+  }
+
+  .ant-modal-footer {
+    border-top-color: #374151;
   }
 } 

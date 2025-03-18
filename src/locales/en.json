@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "TinyMe",
+    "about": "About"
+  },
+  "upload": {
+    "dragText": "Drop images here",
+    "or": "or",
+    "selectButton": "Select Images",
+    "supportText": "Supports PNG, JPG, WebP formats",
+    "addMore": "Add More Images",
+    "clearList": "Clear List"
+  },
+  "imageInfo": {
+    "original": "Original",
+    "compressed": "Compressed",
+    "compress": "Compress",
+    "save": "Save",
+    "remove": "Remove"
+  },
+  "settings": {
+    "title": "Compression Settings",
+    "presets": {
+      "title": "Quick Presets",
+      "deviceTitle": "Device Presets",
+      "web": "Web Images",
+      "social": "Social Media",
+      "archive": "Archive",
+      "mobile1x": "Mobile 1x",
+      "mobile2x": "Mobile 2x",
+      "mobile3x": "Mobile 3x",
+      "androidHD": "Android HD",
+      "androidFHD": "Android FHD",
+      "ipadRetina": "iPad Retina"
+    },
+    "quality": "Compression Quality",
+    "format": "Output Format",
+    "maxSize": "Maximum Size",
+    "width": "Width",
+    "height": "Height",
+    "qualityLow": "Low",
+    "qualityMedium": "Medium",
+    "qualityHigh": "High"
+  },
+  "stats": {
+    "totalImages": "Total Images",
+    "compressed": "Compressed",
+    "averageRatio": "Average Ratio"
+  },
+  "about": {
+    "title": "About TinyMe",
+    "description": "TinyMe is a simple and efficient image compression tool, focused on providing the best image compression experience.",
+    "features": {
+      "title": "Key Features",
+      "list": [
+        "Support for multiple image formats (PNG, JPG, WebP)",
+        "Smart compression algorithm with optimal quality",
+        "Batch processing capability",
+        "Multiple preset options",
+        "Completely local processing for privacy"
+      ]
+    },
+    "developer": {
+      "title": "Developer",
+      "author": "Author",
+      "version": "Version"
+    },
+    "techStack": {
+      "title": "Tech Stack",
+      "description": "Built with Tauri + React + TypeScript"
+    },
+    "buttons": {
+      "github": "GitHub",
+      "close": "Got it"
+    }
+  }
+} 
