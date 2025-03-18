@@ -1,0 +1,197 @@
+/* 全局变量 */
+:root {
+  --primary-color: #1890ff;
+  --background-gradient: linear-gradient(135deg, #f6f8fd 0%, #f1f5ff 100%);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 重置Ant Design的一些默认样式 */
+.ant-layout {
+  background: var(--background-gradient) !important;
+}
+
+.ant-card {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+
+.ant-collapse {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-collapse-item {
+  border-radius: 8px !important;
+  margin-bottom: 12px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* 自定义组件样式 */
+.appContainer {
+  min-height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mainContent {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+}
+
+.settingsPanel {
+  margin-bottom: 24px;
+}
+
+.uploadArea {
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  transition: var(--transition-base);
+}
+
+.uploadArea:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.imageCard {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: var(--transition-base);
+}
+
+.imageCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.imagePreview {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.imagePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition-base);
+}
+
+.imagePreview:hover img {
+  transform: scale(1.05);
+}
+
+.imageInfo {
+  padding: 16px;
+}
+
+.presetButton {
+  width: 100%;
+  margin-bottom: 12px;
+  height: 48px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: var(--transition-base);
+}
+
+.presetButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.compressionProgress {
+  margin-top: 16px;
+}
+
+.statsCard {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.statLabel {
+  color: rgba(0, 0, 0, 0.65);
+  margin-top: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+
+
+  .mainContent {
+    padding: 16px;
+  }
+
+  .imageGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* 暗色模式支持 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .header,
+  .mainContent,
+  .uploadArea,
+  .imageCard,
+  .statsCard {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .statLabel {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .ant-collapse-item {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+} 
