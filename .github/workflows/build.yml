@@ -37,6 +37,7 @@ jobs:
             libssl-dev \
             libsoup2.4-dev \
             libjavascriptcoregtk-4.1-dev
+          npm install
 
       - name: Install dependencies (Windows)
         if: matrix.platform == 'windows-latest'

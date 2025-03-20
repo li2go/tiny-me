@@ -15,7 +15,10 @@ function commitChanges(version) {
         // 提交更改
         execSync(`git commit -m "chore: bump version to ${version}"`, { stdio: 'inherit' });
         
-        console.log('已提交版本号更改');
+        // 推送代码更改
+        execSync('git push origin main', { stdio: 'inherit' });
+        
+        console.log('已提交并推送版本号更改');
     } catch (error) {
         console.error('提交更改失败:', error.message);
         process.exit(1);
